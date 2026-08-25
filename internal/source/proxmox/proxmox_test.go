@@ -11,6 +11,7 @@ func TestProxmoxOSTypeToPlatformName(t *testing.T) {
 		{name: "linux 2.6 kernel", osType: "l26", want: "Other 2.6.x Linux (64-bit)"},
 		{name: "windows 11", osType: "win11", want: "Windows 11"},
 		{name: "windows 10", osType: "win10", want: "Windows 10"},
+		{name: "solaris kernel", osType: "solaris", want: "Solaris Kernel"},
 		{name: "empty type", osType: "", want: ""},
 	}
 	for _, tt := range tests {

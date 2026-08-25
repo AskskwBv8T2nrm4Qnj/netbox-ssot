@@ -338,12 +338,11 @@ func (ps *ProxmoxSource) syncVM( //nolint:gocyclo
 		vmAgentOsInfo, _ = vm.AgentOsInfo(ps.Ctx)
 	}
 
-	platformName := "Unknown"
 	if vmAgentOsInfo != nil && vmAgentOsInfo.PrettyName != "" {
 		platformName = vmAgentOsInfo.PrettyName
 	}
 
-	if platformName == "Unknown" && vm.VirtualMachineConfig.OSType != nil {
+	if vmAgentOsInfo == nil && vm.VirtualMachineConfig.OSType != nil {
 		if name := proxmoxOSTypeToPlatformName(*vm.VirtualMachineConfig.OSType); name != "" {
 			platformName = name
 		}
@@ -1005,9 +1004,7 @@ func (ps *ProxmoxSource) syncContainerNetworks(
 	return nil
 }
 
-// proxmoxOSTypeToPlatformName maps a Proxmox VM OSType identifier to a
-// human-readable platform name. It returns an empty string for unknown types,
-// letting the caller keep its existing fallback.
+// proxmoxOSTypeToPlatformName maps a Proxmox VM OSType identifier to pretty names
 func proxmoxOSTypeToPlatformName(osType string) string {
 	switch osType {
 	case "l26":
@@ -1016,7 +1013,9 @@ func proxmoxOSTypeToPlatformName(osType string) string {
 		return "Windows 10"
 	case "win11":
 		return "Windows 11"
+	case "solaris":
+		return "Solaris Kernel"
 	default:
-		return ""
+		return "Other"
 	}
 }
