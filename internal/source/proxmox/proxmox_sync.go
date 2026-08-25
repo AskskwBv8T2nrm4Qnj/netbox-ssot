@@ -338,11 +338,12 @@ func (ps *ProxmoxSource) syncVM( //nolint:gocyclo
 		vmAgentOsInfo, _ = vm.AgentOsInfo(ps.Ctx)
 	}
 
+	platformName := "Other"
 	if vmAgentOsInfo != nil && vmAgentOsInfo.PrettyName != "" {
 		platformName = vmAgentOsInfo.PrettyName
 	}
 
-	if vmAgentOsInfo == nil && vm.VirtualMachineConfig.OSType != nil {
+	if platformName == "Other" && vm.VirtualMachineConfig.OSType != nil {
 		if name := proxmoxOSTypeToPlatformName(*vm.VirtualMachineConfig.OSType); name != "" {
 			platformName = name
 		}
