@@ -1189,11 +1189,11 @@ func (nbi *NetboxInventory) AddVM(ctx context.Context, newVM *objects.VM) (*obje
 	if len(newVM.Name) > constants.MaxVMNameLength {
 		newVM.Name = newVM.Name[:constants.MaxVMNameLength]
 	}
-	if newVM.Platform) == "Other" && oldVM.Platform != "Other" {
-		newVM.Platform = oldVM.Platform
-	}
 	if oldVM, ok := nbi.vmsIndexByNameAndClusterID[newVM.Name][newVMClusterID]; ok {
 		nbi.OrphanManager.RemoveItem(oldVM)
+		if newVM.Platform) == "Other" && oldVM.Platform != "Other" {
+			newVM.Platform = oldVM.Platform
+		}
 		diffMap, err := utils.JSONDiffMapExceptID(newVM, oldVM, false, nbi.SourcePriority)
 		if err != nil {
 			return nil, err
